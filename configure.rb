@@ -22,6 +22,7 @@ class Configure
         @qt_im_module_default = @qt_im_module.dup
         @gtk2_im_module = `pkg-config --variable=libdir gtk+-2.0`.chomp + "/gtk-2.0/" + `pkg-config --variable=gtk_binary_version gtk+-2.0`.chomp + "/immodules"
         @gtk3_im_module = `pkg-config --variable=libdir gtk+-3.0`.chomp + "/gtk-3.0/" + `pkg-config --variable=gtk_binary_version gtk+-3.0`.chomp + "/immodules"
+        @gtk4_im_module = `pkg-config --variable=libdir gtk+-4.0`.chomp + "/gtk-4.0/" + `pkg-config --variable=gtk_binary_version gtk+-4.0`.chomp + "/immodules"
         @config = []
         parseOpt()
         checkPro()
@@ -35,6 +36,7 @@ class Configure
         opt.on("--qt_im_module", "install dir for immodule for Qt") { @qt_im_module = val }
         opt.on("--gtk2_im_module", "install dir for immodule for Gtk+2") { @gtk2_im_module = val }
         opt.on("--gtk3_im_module", "install dir for immodule for Gtk+3") { @gtk3_im_module = val }
+        opt.on("--gtk4_im_module", "install dir for immodule for Gtk+3") { @gtk4_im_module = val }
         opt.on("--no-dbus", "build and install cuteime without dbus") { @config.push( 'no-dbus' ) }
         opt.on("--no-systemtray", "build and install cuteime without systemtray") { @config.push( 'no-systemtray' ) }
         opt.on("--no-toolbar", "build and install cuteime without toolbar") { @config.push( 'no-toolbar' ) }
@@ -78,6 +80,7 @@ class Configure
         cmd.push "QT_IM_MODULE_DIR=#{@qt_im_module}"
         cmd.push "GTK2_IM_MODULE_DIR=#{@gtk2_im_module}"
         cmd.push "GTK3_IM_MODULE_DIR=#{@gtk3_im_module}"
+        cmd.push "GTK4_IM_MODULE_DIR=#{@gtk4_im_module}"
         cmd.push "CONFIG+=#{@debug ? 'debug' : 'release'}"
         cmd.push @config.collect{ |c| "CUTEIME_CONFIG+=#{c}" } unless @config.empty?
 
@@ -86,6 +89,7 @@ class Configure
         print "immodule for Qt    : #{@qt_im_module}\n"
         print "immodule for Gtk+2 : #{@gtk2_im_module}\n"
         print "immodule for Gtk+3 : #{@gtk3_im_module}\n"
+        print "immodule for Gtk+4 : #{@gtk4_im_module}\n"
         print "DBus               : #{@config.include?('no-dbus') ? 'No' : 'Yes'}\n"
         print "System Tray        : #{@config.include?('no-systemtray') ? 'No' : 'Yes'}\n"
         print "Toolbar            : #{@config.include?('no-toolbar') ? 'No' : 'Yes'}\n"
